@@ -10,7 +10,6 @@ image1_array = asarray(image1)
 image2 = Image.open("image2b.png")
 image2_array = asarray(image2)
 
-
 # get sizes of images
 image1_width = image1.size[0] 
 image1_height = image1.size[1]
@@ -26,12 +25,20 @@ min_height = min(image1_height, image2_height)
 for y in range(min_height):
     for x in range(min_width):
         
-        # calculate difference in pictures based on rgb values
-        diff = image1_array[y][x] - image2_array[y][x]
-        diff_sum = sum(diff)
+        # translate to monochrome
+        for i in range(3):
+            if image1_array[y][x][i] > 128:
+                image1_array[y][x][i] = 255
+            else:
+                image1_array[y][x][i] = 0
+
+            if image2_array[y][x][i] > 128:
+                image2_array[y][x][i] = 255
+            else:
+                image2_array[y][x][i] = 0
 
         # if difference is noticable set pixel as red
-        if(diff_sum) > 100:
+        if image2_array[y][x][0] != image1_array[y][x][0]:
 
             # if pixel is not white copy it from second array
             if(image2_array[y][x][0] != 255):
